@@ -10,26 +10,34 @@ def validate_html(html):
     >>> validate_html('<strong>example')
     False
     '''
-    s = _extract_tags(html)
-    if len(s) < 2:
-        return False
-    #print(s)
-    left = 0
-    right = len(s)-1
-    while (left < right):
-        open = s[left]
-        close = s[right]
-        if open[1:-1] != close[2:-1]:
-            return False
-        right -= 1
-        left += 1
-    return True
-
     # HINT:
     # use the _extract_tags function below to generate a list of html tags without any extra text;
     # then process these html tags using the balanced parentheses algorithm from the book
     # the main difference between your code and the book's code will be that you will have to keep track of not just the 3 types of parentheses,
     # but arbitrary text located between the html tags
+    
+    s = _extract_tags(html)
+    i = 0
+    while i < len(s)-1:
+        left = s[i]
+        right = "<" + "/" + left[1:]
+        if s[i+1] != right:
+            left = s[i+1]
+            right = "<" + "/" + left[1:]
+            i+=1
+            if left[1:2] == '/':
+                return False
+        else:
+            s.remove(left)
+            s.remove(right)
+            i = 0
+        print(s)
+    print(s)
+
+    if (len(s) != 0):
+        return False
+    else:
+        return True
 
 
 def _extract_tags(html):
